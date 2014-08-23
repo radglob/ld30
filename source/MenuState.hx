@@ -27,7 +27,7 @@ class MenuState extends FlxState
 		_titleText.alignment = "center";
 		add(_titleText);
 		
-		_startButton = new FlxButton(0, 0, "Start", startGame);
+		_startButton = new FlxButton(0, 0, "Control Test", startPlayerSandbox);
 		_startButton.setPosition((FlxG.width - _startButton.width) / 2, (FlxG.height + _startButton.height) / 2);
 		add(_startButton);
 		
@@ -51,8 +51,8 @@ class MenuState extends FlxState
 		super.update();
 	}
 	
-	private function startGame():Void
+	private function startPlayerSandbox():Void
 	{
-		FlxG.switchState(new PlayState());
+		FlxG.switchState(new PlayerSandbox());
 	}
 }

@@ -15,29 +15,11 @@ import flixel.group.FlxTypedGroup;
 class PlayState extends FlxState
 {
 	
-	private var _player:Player;
-	private var _platform:Platform;
-	private var _platform2:Platform;
-	
-	private var _platforms:FlxTypedGroup<Platform>;
-	
 	/**
 	 * Function that is called up when to state is created to set it up. 
 	 */
 	override public function create():Void
-	{
-		_player = new Player(0, 0, 1);
-		add(_player);
-		
-		_platform = new Platform(400, FlxG.height - 80, 1, 100, 80);
-		
-		_platform2 = new Platform(200, FlxG.height - 40, 1, 100, 40);
-		
-		_platforms = new FlxTypedGroup<Platform>();
-		_platforms.add(_platform);
-		_platforms.add(_platform2);
-		add(_platforms);
-		
+	{	
 		super.create();
 	}
 	
@@ -55,7 +37,6 @@ class PlayState extends FlxState
 	 */
 	override public function update():Void
 	{
-		FlxG.collide(_platforms, _player);
-		super.update();
+		
 	}	
 }
