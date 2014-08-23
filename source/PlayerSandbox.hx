@@ -43,13 +43,14 @@ class PlayerSandbox extends FlxState
 		secondCamera.bgColor = FlxColor.TRANSPARENT;
 		FlxG.cameras.add(secondCamera);
 		
-		_backgroundImage = new FlxBackdrop(AssetPaths.wallTile_diffuse_10__png, 0.7, 0.7, true, false);
-		_backgroundImage.setGraphicSize(FlxG.width, FlxG.width);
+		_backgroundImage = new FlxBackdrop(AssetPaths.wallTile_diffuse_10__png, 1, 1, true, false);
 		add(_backgroundImage);
 		
+		// Map one camera to background, other to foreground.
 		_backgroundImage.cameras = [FlxG.camera];
 		FlxCamera.defaultCameras = [secondCamera];
 		
+		// Adjust camera to fit background.
 		FlxG.camera.zoom = FlxG.width / BG_WIDTH;
 		FlxG.camera.setSize(BG_WIDTH, Std.int(BG_WIDTH * 3 / 4));
 		
@@ -91,8 +92,10 @@ class PlayerSandbox extends FlxState
 	override public function update():Void
 	{
 		FlxG.collide(_platforms, _player, checkCollision);
+		
 		FlxG.camera.setBounds(0, 0, 100000, BG_WIDTH, true);
 		FlxG.camera.follow(_player, FlxCamera.STYLE_PLATFORMER);
+		
 		secondCamera.setBounds(0, 0, 100000, FlxG.height, true);
 		secondCamera.follow(_player, FlxCamera.STYLE_PLATFORMER);
 		
