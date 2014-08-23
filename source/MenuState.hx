@@ -6,6 +6,8 @@ import flixel.FlxState;
 import flixel.text.FlxText;
 import flixel.ui.FlxButton;
 import flixel.util.FlxMath;
+import flixel.util.FlxDestroyUtil;
+import openfl.system.System;
 
 using flixel.util.FlxSpriteUtil;
 
@@ -16,6 +18,7 @@ class MenuState extends FlxState
 {
 	private var _titleText:FlxText;
 	private var _startButton:FlxButton;
+	private var _quitButton:FlxButton;
 	
 	/**
 	 * Function that is called up when to state is created to set it up. 
@@ -31,6 +34,10 @@ class MenuState extends FlxState
 		_startButton.setPosition((FlxG.width - _startButton.width) / 2, (FlxG.height + _startButton.height) / 2);
 		add(_startButton);
 		
+		_quitButton = new FlxButton(0, 0, "Exit", exitGame);
+		_quitButton.setPosition((FlxG.width - _quitButton.width) / 2, FlxG.height / 2 + _quitButton.height * 2);
+		add(_quitButton);
+		
 		super.create();
 	}
 	
@@ -40,6 +47,9 @@ class MenuState extends FlxState
 	 */
 	override public function destroy():Void
 	{
+		_titleText = FlxDestroyUtil.destroy(_titleText);
+		_startButton = FlxDestroyUtil.destroy(_startButton);
+		_quitButton = FlxDestroyUtil.destroy(_quitButton);
 		super.destroy();
 	}
 
@@ -54,5 +64,10 @@ class MenuState extends FlxState
 	private function startPlayerSandbox():Void
 	{
 		FlxG.switchState(new PlayerSandbox());
+	}
+	
+	private function exitGame():Void
+	{
+		System.exit(0);
 	}
 }

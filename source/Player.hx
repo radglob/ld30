@@ -16,12 +16,19 @@ class Player extends DepthSprite
 		super(X, Y, Z);
 		makeGraphic(16, 32, FlxColor.BLUE);
 		acceleration.y = _gravity;
-		drag.x = 300;
+		velocity.x = 200;
+		maxVelocity.x = 250;
+		
 	}
 	
 	override public function update():Void
 	{
 		updateMovement();
+		
+		// Since there is no min velocity, we have to track that.
+		if (velocity.x < 150)
+			velocity.x = 150;
+			
 		super.update();
 	}
 	
@@ -57,10 +64,10 @@ class Player extends DepthSprite
 		}
 		
 		if (_left)
-			velocity.x = -200;
+			acceleration.x = -50;
 			
 		if (_right)
-			velocity.x = 200;
+			acceleration.x = 50;
 		
 		_readyToJump = FlxG.keys.justPressed.SPACE;
 		if (_readyToJump && velocity.y == 0)
