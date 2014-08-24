@@ -11,15 +11,27 @@ import flixel.group.FlxTypedGroup;
 
 /**
  * A FlxState which can be used for the actual gameplay.
+ * @author Wallace Brown
  */
 class PlayState extends FlxState
 {
+	
+	private var m_generator:RunnerGenerator;
+	private var m_runner:Runner;
 	
 	/**
 	 * Function that is called up when to state is created to set it up. 
 	 */
 	override public function create():Void
 	{	
+		add(new DBG_InfiniteScroll());
+		
+		m_generator = new RunnerGenerator();
+		m_generator.set_graphics_set(1);
+		
+		m_runner = m_generator.get_runner();
+		add(m_runner);
+		
 		super.create();
 	}
 	
@@ -37,6 +49,8 @@ class PlayState extends FlxState
 	 */
 	override public function update():Void
 	{
+		m_generator.update();
 		
+		m_runner.update();
 	}	
 }

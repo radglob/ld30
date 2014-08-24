@@ -6,6 +6,7 @@ import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.group.FlxTypedGroup;
 import flixel.text.FlxText;
+import flixel.tile.FlxTileblock;
 import flixel.ui.FlxButton;
 import flixel.util.FlxMath;
 import flixel.group.FlxTypedGroup;
@@ -17,6 +18,7 @@ import flixel.util.FlxRandom;
 import flixel.util.FlxSort;
 import flixel.addons.display.FlxBackdrop;
 import flixel.util.FlxPoint;
+import flixel.util.FlxDestroyUtil;
 
 /**
  * ...
@@ -31,6 +33,7 @@ class PlayerSandbox extends FlxState
 	private var _backgroundImage:FlxBackdrop;
 	private var collisionsAllowed:Int;
 	private var secondCamera:FlxCamera;
+	private var block:FlxTileblock;
 	
 	private static var BG_WIDTH:Int = 2048;
 	
@@ -74,6 +77,8 @@ class PlayerSandbox extends FlxState
 		_player.setPosition(0, FlxG.height - _player.height);
 		add(_player);
 		
+		FlxG.mouse.visible = false;
+		
 		super.create();
 	}
 	
@@ -83,6 +88,13 @@ class PlayerSandbox extends FlxState
 	 */
 	override public function destroy():Void
 	{
+		_player = FlxDestroyUtil.destroy(_player);
+		_platform = FlxDestroyUtil.destroy(_platform);
+		_platforms = FlxDestroyUtil.destroy(_platforms);
+		_backgroundImage = FlxDestroyUtil.destroy(_backgroundImage);
+		
+		FlxG.mouse.visible = true;
+		
 		super.destroy();
 	}
 
