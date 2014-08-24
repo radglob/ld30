@@ -43,7 +43,7 @@ class PlayerSandbox extends FlxState
 		secondCamera.bgColor = FlxColor.TRANSPARENT;
 		FlxG.cameras.add(secondCamera);
 		
-		_backgroundImage = new FlxBackdrop(AssetPaths.wallTile_diffuse_10__png, 1, 1, true, false);
+		_backgroundImage = new FlxBackdrop("images/wallTile_diffuse_10.png", 1, 1, true, false);
 		add(_backgroundImage);
 		
 		// Map one camera to background, other to foreground.
