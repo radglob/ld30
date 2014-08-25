@@ -20,6 +20,7 @@ import flixel.util.FlxSort;
 import flixel.addons.display.FlxBackdrop;
 import flixel.util.FlxPoint;
 import flixel.util.FlxDestroyUtil;
+import flixel.util.FlxTimer;
 
 /**
  * ...
@@ -30,6 +31,7 @@ class PlayState extends FlxState
 	
 	private var _player:Player;
 	private var _platform:PlatformNormal;
+	private var _lastPlatform:PlatformNormal;
 	private var _platforms:FlxTypedGroup<PlatformNormal>;
 	private var _backgroundImage:FlxBackdrop;
 	private var collisionsAllowed:Int;
@@ -66,11 +68,20 @@ class PlayState extends FlxState
 		FlxG.camera.zoom = FlxG.width / BG_WIDTH;
 		FlxG.camera.setSize(BG_WIDTH, BG_WIDTH);
 		
-		// Setup platforms
+		// Setup platforms and props
 		_platforms = new FlxTypedGroup<PlatformNormal>();
+		propFactory = new PropFactory();
+		props = new FlxSpriteGroup();
 		
 		for (i in 1...100) {
-			_platform = new PlatformNormal(i * 600, FlxG.height - 50);
+			var randomDistance = FlxRandom.floatRanged(6, 10) * 100;
+			var randomHeight = FlxRandom.floatRanged( 5, 12.5) * 10;
+			_platform = new PlatformNormal(i * randomDistance, FlxG.height - randomHeight);
+			
+			// Add prop
+			var prop = propFactory.getRandomProp(_platform.m_x + _platform.m_width / 2, _platform.height);
+			props.add(prop);
+			
 			_platforms.add(_platform);
 		}
 		
@@ -80,12 +91,6 @@ class PlayState extends FlxState
 		
 		_player = new Player(0, 0, 1);
 		_player.setPosition(0, FlxG.height - _player.height);
-		
-		propFactory = new PropFactory();
-		props = new FlxSpriteGroup();
-		
-		//var prop = propFactory.getProp(0, "fridges.png");
-		//props.add(prop);
 		
 		add(props);
 		add(_platforms);
@@ -126,7 +131,9 @@ class PlayState extends FlxState
 		secondCamera.follow(_player, FlxCamera.STYLE_PLATFORMER);
 		
 		if (collisionsAllowed == 0) {
-			FlxG.switchState(new GameOverState());
+			_player.animation.curAnim.stop();
+			_player.animation.play("cry");
+			new FlxTimer(2.0, callBack, 1); 
 		}
 		
 		_platforms.forEachDead(addToScene);
@@ -144,8 +151,14 @@ class PlayState extends FlxState
 			collisionsAllowed -= 1;
 			secondCamera.shake();
 			
+			if (player.animation.curAnim != null)
+				player.animation.curAnim.stop();
+			player.animation.play("fall", true);
+			
 			// Move the player away.
 			player.x -= 150;
+			player.velocity.x = 0;
+			player.acceleration.x = 0;
 			
 		}
 		
@@ -172,5 +185,10 @@ class PlayState extends FlxState
 		{
 			platform.kill();
 		}
+	}
+	
+	private function callBack(Timer:FlxTimer):Void
+	{
+		FlxG.switchState(new GameOverState());
 	}
 }
