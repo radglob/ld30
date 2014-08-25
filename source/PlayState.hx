@@ -37,7 +37,7 @@ class PlayState extends FlxState
 	private var propFactory:PropFactory;
 	private var props:FlxSpriteGroup;
 	
-	private static var BG_WIDTH:Int = 1024;
+	private static var BG_WIDTH:Int = 2048;
 	
 	public static var GRAPHIC_PREFIX_PLATFORM:String;
 	public static var GRAPHIC_PREFIX_PLATFORM_V1:String = "images/v1/platform_";
@@ -55,7 +55,7 @@ class PlayState extends FlxState
 		secondCamera.bgColor = FlxColor.TRANSPARENT;
 		FlxG.cameras.add(secondCamera);
 		
-		_backgroundImage = new FlxBackdrop("images/space.png", 1, 1, true, false);
+		_backgroundImage = new FlxBackdrop("images/star.png", 1, 1, true, false);
 		add(_backgroundImage);
 		
 		// Map one camera to background, other to foreground.
@@ -84,8 +84,8 @@ class PlayState extends FlxState
 		propFactory = new PropFactory();
 		props = new FlxSpriteGroup();
 		
-		var prop = propFactory.getProp(0, "fridges.png");
-		props.add(prop);
+		//var prop = propFactory.getProp(0, "fridges.png");
+		//props.add(prop);
 		
 		add(props);
 		add(_platforms);
@@ -120,7 +120,7 @@ class PlayState extends FlxState
 		FlxG.collide(_platforms, _player, checkCollision);
 		
 		FlxG.camera.setBounds(0, 0, 100000, BG_WIDTH, true);
-		FlxG.camera.follow(_player, FlxCamera.STYLE_PLATFORMER);
+		FlxG.camera.follow(_player, FlxCamera.STYLE_PLATFORMER, new FlxPoint(-BG_WIDTH, 0));
 		
 		secondCamera.setBounds(0, 0, 100000, FlxG.height, true);
 		secondCamera.follow(_player, FlxCamera.STYLE_PLATFORMER);
