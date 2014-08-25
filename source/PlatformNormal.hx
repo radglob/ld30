@@ -94,32 +94,55 @@ class PlatformNormal extends Platform
 	
 	function add_column_left(height:Int = 1, X:Float = 0, Y:Float = 0):Void
 	{
-		add(new FlxSprite(X, Y, m_graphic_top_left));
+		var sprite:FlxSprite = new FlxSprite(X, Y, m_graphic_top_left);
+		sprite.immovable = true;
+		add(sprite);
 		
 		for (iCount in 1 ... height + 1)
-			add(new FlxSprite(X, Y + Platform.TILE_SIZE * iCount, m_graphic_middle_left));
-			
-		add(new FlxSprite(X, Y + Platform.TILE_SIZE * height, m_graphic_bottom_left));
+		{
+			sprite = new FlxSprite(X, Y + Platform.TILE_SIZE * iCount, m_graphic_middle_left);
+			sprite.immovable = true;
+			add(sprite);
+		}
+		
+		sprite = new FlxSprite(X, Y + Platform.TILE_SIZE * height, m_graphic_bottom_left);
+		sprite.immovable = true;
+		add(sprite);
 	}
 	
 	function add_column_middle(height:Int = 1, X:Float = 0, Y:Float = 0):Void
 	{
-		add(new FlxSprite(X, Y, m_graphic_top_center));
+		var sprite:FlxSprite = new FlxSprite(X, Y, m_graphic_top_center);
+		sprite.immovable = true;
+		add(sprite);
 		
 		for (iCount in 1 ... height + 1)
-			add(new FlxSprite(X, Y + Platform.TILE_SIZE * iCount, m_graphic_middle_center));
-			
-		add(new FlxSprite(X, Y + Platform.TILE_SIZE * height, m_graphic_bottom_center));
+		{
+			sprite = new FlxSprite(X, Y + Platform.TILE_SIZE * iCount, m_graphic_middle_center);
+			sprite.immovable = true;
+			add(sprite);
+		}
+		
+		sprite = new FlxSprite(X, Y + Platform.TILE_SIZE * height, m_graphic_bottom_center);
+		sprite.immovable = true;
+		add(sprite);
 	}
 	
 	function add_column_right(height:Int = 1, X:Float = 0, Y:Float = 0):Void
 	{
-		add(new FlxSprite(X, Y, m_graphic_top_right));
+		var sprite:FlxSprite = new FlxSprite(X, Y, m_graphic_top_right);
+		sprite.immovable = true;
+		add(sprite);
 		
 		for (iCount in 1 ... height + 1)
-			add(new FlxSprite(X, Y + Platform.TILE_SIZE * iCount, m_graphic_middle_right));
-			
-		add(new FlxSprite(X, Y + Platform.TILE_SIZE * height, m_graphic_bottom_right));
+		{
+			sprite = new FlxSprite(X, Y + Platform.TILE_SIZE * iCount, m_graphic_middle_right);
+			sprite.immovable = true;
+			add(sprite);
+		}
+		sprite = new FlxSprite(X, Y + Platform.TILE_SIZE * height, m_graphic_bottom_right);
+		sprite.immovable = true;
+		add(sprite);
 	}
 	
 }

@@ -4,6 +4,7 @@ import flash.display.BitmapData;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
+import flixel.group.FlxSpriteGroup;
 import flixel.group.FlxTypedGroup;
 import flixel.text.FlxText;
 import flixel.tile.FlxTileblock;
@@ -33,6 +34,8 @@ class PlayState extends FlxState
 	private var _backgroundImage:FlxBackdrop;
 	private var collisionsAllowed:Int;
 	private var secondCamera:FlxCamera;
+	private var propFactory:PropFactory;
+	private var props:FlxSpriteGroup;
 	
 	private static var BG_WIDTH:Int = 1024;
 	
@@ -63,21 +66,29 @@ class PlayState extends FlxState
 		FlxG.camera.zoom = FlxG.width / BG_WIDTH;
 		FlxG.camera.setSize(BG_WIDTH, BG_WIDTH);
 		
+		// Setup platforms
 		_platforms = new FlxTypedGroup<PlatformNormal>();
 		
 		for (i in 1...100) {
-			_platform = new PlatformNormal(i * 400, FlxG.height - 50);
+			_platform = new PlatformNormal(i * 600, FlxG.height - 50);
 			_platforms.add(_platform);
 		}
 		
 		_platforms.sort(byX);
 		
-		add(_platforms);
-		
 		collisionsAllowed = 3;
 		
 		_player = new Player(0, 0, 1);
 		_player.setPosition(0, FlxG.height - _player.height);
+		
+		propFactory = new PropFactory();
+		props = new FlxSpriteGroup();
+		
+		var prop = propFactory.getProp(0, "fridges.png");
+		props.add(prop);
+		
+		add(props);
+		add(_platforms);
 		add(_player);
 		
 		FlxG.mouse.visible = false;
@@ -130,7 +141,6 @@ class PlayState extends FlxState
 		if (player.y + player.height > obstacle.y)
 		{
 			// Show the collision, and count it.
-			obstacle.color = FlxColor.RED;
 			collisionsAllowed -= 1;
 			secondCamera.shake();
 			
@@ -138,8 +148,6 @@ class PlayState extends FlxState
 			player.x -= 150;
 			
 		}
-		else
-			obstacle.color = FlxColor.WHITE;
 		
 		FlxObject.separate(obstacle, player);
 	}
@@ -152,7 +160,7 @@ class PlayState extends FlxState
 	private function addToScene(platform:Platform)
 	{
 		// If within three screen lengths, add to scene.
-		if (platform.x < _player.x + FlxG.width * 3)
+		if (platform.members[0].x < _player.x + FlxG.width * 3)
 		{
 			platform.revive();
 		}
@@ -160,7 +168,7 @@ class PlayState extends FlxState
 	
 	private function cull(platform:Platform)
 	{
-		if (platform.x < _player.x - FlxG.width * 3)
+		if (platform.members[0].x < _player.x - FlxG.width * 3)
 		{
 			platform.kill();
 		}
