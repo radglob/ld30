@@ -70,7 +70,7 @@ class MenuState extends FlxState
 	
 	private function startGame():Void
 	{
-		FlxG.switchState(new PlayerSandbox());
+		FlxG.switchState(new PlayState());
 	}
 	
 	private function exitGame():Void
