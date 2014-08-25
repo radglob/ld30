@@ -14,7 +14,7 @@ class Player extends DepthSprite
 	public function new(X:Float, Y:Float, Z:Int) 
 	{
 		super(X, Y, Z);
-		makeGraphic(16, 32, FlxColor.BLUE);
+		loadGraphic("assets/images/
 		acceleration.y = _gravity;
 		velocity.x = 200;
 		maxVelocity.x = 250;
@@ -64,11 +64,16 @@ class Player extends DepthSprite
 		}
 		
 		if (_left)
+		{
 			acceleration.x = -50;
-			
-		if (_right)
+		}	
+		else if (_right)
+		{
 			acceleration.x = 50;
-		
+		}
+		else
+			acceleration.x = 5;
+			
 		_readyToJump = FlxG.keys.justPressed.SPACE;
 		if (_readyToJump && velocity.y == 0)
 			velocity.y = -200;

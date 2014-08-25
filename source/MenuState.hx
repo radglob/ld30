@@ -18,7 +18,9 @@ class MenuState extends FlxState
 {
 	private var _titleText:FlxText;
 	private var _startButton:FlxButton;
+	private var _creditsButton:FlxButton;
 	private var _quitButton:FlxButton;
+	private var _test:FlxButton;
 	
 	/**
 	 * Function that is called up when to state is created to set it up. 
@@ -30,12 +32,16 @@ class MenuState extends FlxState
 		_titleText.alignment = "center";
 		add(_titleText);
 		
-		_startButton = new FlxButton(0, 0, "Control Test", startPlayerSandbox);
-		_startButton.setPosition((FlxG.width - _startButton.width) / 2, (FlxG.height + _startButton.height) / 2);
+		_startButton = new FlxButton(0, 0, "Play", startGame);
+		_startButton.setPosition((FlxG.width - _startButton.width) / 2, FlxG.height / 2 + _startButton.height);
 		add(_startButton);
 		
+		_creditsButton = new FlxButton(0, 0, "Credits", showCredits);
+		_creditsButton.setPosition((FlxG.width - _creditsButton.width) / 2, FlxG.height / 2 + _creditsButton.height * 2);
+		add(_creditsButton);
+		
 		_quitButton = new FlxButton(0, 0, "Exit", exitGame);
-		_quitButton.setPosition((FlxG.width - _quitButton.width) / 2, FlxG.height / 2 + _quitButton.height * 2);
+		_quitButton.setPosition((FlxG.width - _quitButton.width) / 2, FlxG.height / 2 + _quitButton.height * 3);
 		add(_quitButton);
 		
 		super.create();
@@ -50,6 +56,7 @@ class MenuState extends FlxState
 		_titleText = FlxDestroyUtil.destroy(_titleText);
 		_startButton = FlxDestroyUtil.destroy(_startButton);
 		_quitButton = FlxDestroyUtil.destroy(_quitButton);
+		_creditsButton = FlxDestroyUtil.destroy(_creditsButton);
 		super.destroy();
 	}
 
@@ -61,7 +68,7 @@ class MenuState extends FlxState
 		super.update();
 	}
 	
-	private function startPlayerSandbox():Void
+	private function startGame():Void
 	{
 		FlxG.switchState(new PlayerSandbox());
 	}
@@ -69,5 +76,10 @@ class MenuState extends FlxState
 	private function exitGame():Void
 	{
 		System.exit(0);
+	}
+	
+	private function showCredits():Void
+	{
+		FlxG.switchState(new CreditsState());
 	}
 }
