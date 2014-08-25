@@ -19,6 +19,7 @@ import flixel.util.FlxSort;
 import flixel.addons.display.FlxBackdrop;
 import flixel.util.FlxPoint;
 import flixel.util.FlxDestroyUtil;
+import flixel.group.FlxSpriteGroup;
 
 /**
  * ...
@@ -26,27 +27,35 @@ import flixel.util.FlxDestroyUtil;
  */
 class PlayerSandbox extends FlxState  
 {
+	public static var GRAPHIC_PREFIX_PLATFORM:String;
+	public static var GRAPHIC_PREFIX_PLATFORM_V1:String = "assets/images/v1/platform_";
+	public static var GRAPHIC_PREFIX_PLATFORM_V2:String = "assets/images/v2/platform_";
+	public static var GRAPHIC_PREFIX_PLATFORM_V3:String = "assets/images/v3/platform_";
 	
 	private var _player:Player;
-	private var _platform:Platform;
-	private var _platforms:FlxTypedGroup<Platform>;
 	private var _backgroundImage:FlxBackdrop;
 	private var collisionsAllowed:Int;
 	private var secondCamera:FlxCamera;
-	private var block:FlxTileblock;
+	private var props:FlxSpriteGroup;
+	private var propFactory:PropFactory;
+	private var platform:PlatformNormal;
+	private var platforms:FlxTypedGroup<PlatformNormal>;
 	
-	private static var BG_WIDTH:Int = 2048;
+	private static var BG_WIDTH:Int = 1024;
 	
 	/**
 	 * Function that is called up when to state is created to set it up. 
 	 */
 	override public function create():Void
 	{	
+		GRAPHIC_PREFIX_PLATFORM = GRAPHIC_PREFIX_PLATFORM_V1;
+		
+		// Setup cameras
 		secondCamera = new FlxCamera(0, 0, FlxG.width, FlxG.height);
 		secondCamera.bgColor = FlxColor.TRANSPARENT;
 		FlxG.cameras.add(secondCamera);
 		
-		_backgroundImage = new FlxBackdrop(AssetPaths.wallTile_diffuse_10__png, 1, 1, true, false);
+		_backgroundImage = new FlxBackdrop("assets/images/space.png", 0.6, 0.6, true, false);
 		add(_backgroundImage);
 		
 		// Map one camera to background, other to foreground.
@@ -55,26 +64,34 @@ class PlayerSandbox extends FlxState
 		
 		// Adjust camera to fit background.
 		FlxG.camera.zoom = FlxG.width / BG_WIDTH;
-		FlxG.camera.setSize(BG_WIDTH, Std.int(BG_WIDTH * 3 / 4));
-		
-		_platforms = new FlxTypedGroup<Platform>();
-		
-		for (i in 1...100) {
-			var randomHeight = FlxRandom.intRanged(20, 40);
-			var randomWidth = FlxRandom.intRanged(40, 80);
-			_platform = new Platform(i * 250, FlxG.height - randomHeight, 1, randomWidth, randomHeight);
-			_platform.kill();
-			_platforms.add(_platform);
-		}
-		
-		_platforms.sort(byX);
-		
-		add(_platforms);
+		FlxG.camera.setSize(BG_WIDTH, BG_WIDTH);
 		
 		collisionsAllowed = 3;
 		
+		propFactory = new PropFactory();
+		
 		_player = new Player(0, 0, 1);
 		_player.setPosition(0, FlxG.height - _player.height);
+		
+		// Setup props/
+		props = new FlxSpriteGroup();
+		
+		// Add a single prop.
+		var prop = propFactory.getProp(0, 0, "fridges.png");
+		props.add(prop);
+		
+		// Setup up platforms
+		platforms = new FlxTypedGroup<PlatformNormal>();
+		for (i in 1 ... 100)
+		{
+			platform = new PlatformNormal(i * 600, FlxG.height - 50);
+			platforms.add(platform);
+		}
+		
+		platforms.kill();
+		
+		add(props);
+		add(platforms);
 		add(_player);
 		
 		FlxG.mouse.visible = false;
@@ -89,8 +106,6 @@ class PlayerSandbox extends FlxState
 	override public function destroy():Void
 	{
 		_player = FlxDestroyUtil.destroy(_player);
-		_platform = FlxDestroyUtil.destroy(_platform);
-		_platforms = FlxDestroyUtil.destroy(_platforms);
 		_backgroundImage = FlxDestroyUtil.destroy(_backgroundImage);
 		
 		FlxG.mouse.visible = true;
@@ -102,11 +117,9 @@ class PlayerSandbox extends FlxState
 	 * Function that is called once every frame.
 	 */
 	override public function update():Void
-	{
-		FlxG.collide(_platforms, _player, checkCollision);
-		
+	{	
 		FlxG.camera.setBounds(0, 0, 100000, BG_WIDTH, true);
-		FlxG.camera.follow(_player, FlxCamera.STYLE_PLATFORMER);
+		FlxG.camera.follow(_player, FlxCamera.STYLE_PLATFORMER, new FlxPoint(-BG_WIDTH, 0));
 		
 		secondCamera.setBounds(0, 0, 100000, FlxG.height, true);
 		secondCamera.follow(_player, FlxCamera.STYLE_PLATFORMER);
@@ -115,9 +128,11 @@ class PlayerSandbox extends FlxState
 			FlxG.switchState(new GameOverState());
 		}
 		
-		_platforms.forEachDead(addToScene);
-		_platforms.forEachAlive(cull);
+		FlxG.collide(platforms, _player, checkCollision);
 		
+		platforms.forEachDead(addToScene);
+		platforms.forEachAlive(cull);
+	
 		super.update();
 	}
 	
@@ -127,7 +142,6 @@ class PlayerSandbox extends FlxState
 		if (player.y + player.height > obstacle.y)
 		{
 			// Show the collision, and count it.
-			obstacle.color = FlxColor.RED;
 			collisionsAllowed -= 1;
 			secondCamera.shake();
 			
@@ -135,8 +149,6 @@ class PlayerSandbox extends FlxState
 			player.x -= 150;
 			
 		}
-		else
-			obstacle.color = FlxColor.WHITE;
 		
 		FlxObject.separate(obstacle, player);
 	}
@@ -146,7 +158,7 @@ class PlayerSandbox extends FlxState
 		return FlxSort.byValues(Order, Obj1.x, Obj2.x);
 	}
 	
-	private function addToScene(platform:Platform)
+	private function addToScene(platform:PlatformNormal)
 	{
 		// If within three screen lengths, add to scene.
 		if (platform.x < _player.x + FlxG.width * 3)
@@ -155,7 +167,7 @@ class PlayerSandbox extends FlxState
 		}
 	}
 	
-	private function cull(platform:Platform)
+	private function cull(platform:PlatformNormal)
 	{
 		if (platform.x < _player.x - FlxG.width * 3)
 		{

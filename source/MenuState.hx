@@ -20,6 +20,7 @@ class MenuState extends FlxState
 	private var _startButton:FlxButton;
 	private var _creditsButton:FlxButton;
 	private var _quitButton:FlxButton;
+	private var _test:FlxButton;
 	
 	/**
 	 * Function that is called up when to state is created to set it up. 
@@ -69,7 +70,7 @@ class MenuState extends FlxState
 	
 	private function startGame():Void
 	{
-		FlxG.switchState(new PlayState());
+		FlxG.switchState(new PlayerSandbox());
 	}
 	
 	private function exitGame():Void
