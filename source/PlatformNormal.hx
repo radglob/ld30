@@ -43,17 +43,17 @@ class PlatformNormal extends Platform
 	
 	function resolve_graphics():Void
 	{
-		m_graphic_top_left = PlayerSandbox.GRAPHIC_PREFIX_PLATFORM + "topLeft.png";
-		m_graphic_top_center = PlayerSandbox.GRAPHIC_PREFIX_PLATFORM + "top.png";
-		m_graphic_top_right = PlayerSandbox.GRAPHIC_PREFIX_PLATFORM + "topRight.png";
+		m_graphic_top_left = PlayState.GRAPHIC_PREFIX_PLATFORM + "topLeft.png";
+		m_graphic_top_center = PlayState.GRAPHIC_PREFIX_PLATFORM + "top.png";
+		m_graphic_top_right = PlayState.GRAPHIC_PREFIX_PLATFORM + "topRight.png";
 		
-		m_graphic_middle_left = PlayerSandbox.GRAPHIC_PREFIX_PLATFORM + "left.png";
-		m_graphic_middle_center = PlayerSandbox.GRAPHIC_PREFIX_PLATFORM + "basic.png";
-		m_graphic_middle_right = PlayerSandbox.GRAPHIC_PREFIX_PLATFORM + "right.png";
+		m_graphic_middle_left = PlayState.GRAPHIC_PREFIX_PLATFORM + "left.png";
+		m_graphic_middle_center = PlayState.GRAPHIC_PREFIX_PLATFORM + "basic.png";
+		m_graphic_middle_right = PlayState.GRAPHIC_PREFIX_PLATFORM + "right.png";
 		
-		m_graphic_bottom_left = PlayerSandbox.GRAPHIC_PREFIX_PLATFORM + "bottomLeft.png";
-		m_graphic_bottom_center = PlayerSandbox.GRAPHIC_PREFIX_PLATFORM + "bottom.png";
-		m_graphic_bottom_right = PlayerSandbox.GRAPHIC_PREFIX_PLATFORM + "bottomRight.png";
+		m_graphic_bottom_left = PlayState.GRAPHIC_PREFIX_PLATFORM + "bottomLeft.png";
+		m_graphic_bottom_center = PlayState.GRAPHIC_PREFIX_PLATFORM + "bottom.png";
+		m_graphic_bottom_right = PlayState.GRAPHIC_PREFIX_PLATFORM + "bottomRight.png";
 	}
 	
 	function construct_platform():Void
@@ -94,55 +94,32 @@ class PlatformNormal extends Platform
 	
 	function add_column_left(height:Int = 1, X:Float = 0, Y:Float = 0):Void
 	{
-		var sprite:FlxSprite = new FlxSprite(X, Y, m_graphic_top_left);
-		sprite.immovable = true;
-		add(sprite);
+		add(new FlxSprite(X, Y, m_graphic_top_left));
 		
 		for (iCount in 1 ... height + 1)
-		{
-			sprite = new FlxSprite(X, Y + Platform.TILE_SIZE * iCount, m_graphic_middle_left);
-			sprite.immovable = true;
-			add(sprite);
-		}
-		
-		sprite = new FlxSprite(X, Y + Platform.TILE_SIZE * height, m_graphic_bottom_left);
-		sprite.immovable = true;
-		add(sprite);
+			add(new FlxSprite(X, Y + Platform.TILE_SIZE * iCount, m_graphic_middle_left));
+			
+		add(new FlxSprite(X, Y + Platform.TILE_SIZE * height, m_graphic_bottom_left));
 	}
 	
 	function add_column_middle(height:Int = 1, X:Float = 0, Y:Float = 0):Void
 	{
-		var sprite:FlxSprite = new FlxSprite(X, Y, m_graphic_top_center);
-		sprite.immovable = true;
-		add(sprite);
+		add(new FlxSprite(X, Y, m_graphic_top_center));
 		
 		for (iCount in 1 ... height + 1)
-		{
-			sprite = new FlxSprite(X, Y + Platform.TILE_SIZE * iCount, m_graphic_middle_center);
-			sprite.immovable = true;
-			add(sprite);
-		}
-		
-		sprite = new FlxSprite(X, Y + Platform.TILE_SIZE * height, m_graphic_bottom_center);
-		sprite.immovable = true;
-		add(sprite);
+			add(new FlxSprite(X, Y + Platform.TILE_SIZE * iCount, m_graphic_middle_center));
+			
+		add(new FlxSprite(X, Y + Platform.TILE_SIZE * height, m_graphic_bottom_center));
 	}
 	
 	function add_column_right(height:Int = 1, X:Float = 0, Y:Float = 0):Void
 	{
-		var sprite:FlxSprite = new FlxSprite(X, Y, m_graphic_top_right);
-		sprite.immovable = true;
-		add(sprite);
+		add(new FlxSprite(X, Y, m_graphic_top_right));
 		
 		for (iCount in 1 ... height + 1)
-		{
-			sprite = new FlxSprite(X, Y + Platform.TILE_SIZE * iCount, m_graphic_middle_right);
-			sprite.immovable = true;
-			add(sprite);
-		}
-		sprite = new FlxSprite(X, Y + Platform.TILE_SIZE * height, m_graphic_bottom_right);
-		sprite.immovable = true;
-		add(sprite);
+			add(new FlxSprite(X, Y + Platform.TILE_SIZE * iCount, m_graphic_middle_right));
+			
+		add(new FlxSprite(X, Y + Platform.TILE_SIZE * height, m_graphic_bottom_right));
 	}
 	
 }

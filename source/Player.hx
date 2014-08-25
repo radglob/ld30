@@ -14,7 +14,7 @@ class Player extends DepthSprite
 	public function new(X:Float, Y:Float, Z:Int) 
 	{
 		super(X, Y, Z);
-		loadGraphic("assets/images/
+		makeGraphic(16, 32, FlxColor.BLUE);
 		acceleration.y = _gravity;
 		velocity.x = 200;
 		maxVelocity.x = 250;

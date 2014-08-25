@@ -49,7 +49,7 @@ class GameOverState extends FlxState
 	
 	private function replay():Void
 	{
-		FlxG.switchState(new PlayerSandbox());
+		FlxG.switchState(new PlayState());
 	}
 	
 	private function goToMenu():Void
